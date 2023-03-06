@@ -1,0 +1,50 @@
+<div class="uploadfilecontainer" (click)="fileInput.click()" appDragDrop (onFileDropped)="onFileChange($event)">
+  <h2>Drag and drop your .xslx</h2>
+  <input hidden type="file" #fileInput (change)="onFileChange($event.target.files)" />
+</div>
+
+
+<section class="tableSection" *ngIf="fileUploaded">
+  <mat-table class="matTable" [dataSource]="dataSource">
+    <ng-container *ngFor="let column of displayedColumns; let i = index">
+      <ng-container *ngIf="column != 'acciones'; else acciones" [matColumnDef]="column">
+        <mat-header-cell *matHeaderCellDef>
+          <span>{{ column }}</span>
+        </mat-header-cell>
+        <mat-cell *matCellDef="let row"> {{ row[i] }} </mat-cell>
+      </ng-container>
+
+      <ng-template #acciones>
+        <ng-container matColumnDef="acciones">
+          <mat-header-cell *matHeaderCellDef>
+            <span translate> CP.Campo.Acciones </span>
+          </mat-header-cell>
+          <mat-cell *matCellDef="let row">
+            <button mat-icon-button aria-label="edit-element" (click)="editarRegistro(row)">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button mat-icon-button aria-label="delete-element" (click)="editarRegistro(row)">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </mat-cell>
+        </ng-container>
+      </ng-template>
+    </ng-container>
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+  </mat-table>
+
+  <mat-paginator #paginator [pageIndex]="0" pageSize="5" pageSizeOptions="[5,10,25,50]"> </mat-paginator>
+</section>
+
+
+<table class="sjs-table">
+  <tbody>
+    <tr *ngFor="let row of data">
+      <td *ngFor="let val of row">
+        {{ val }}
+      </td>
+    </tr>
+  </tbody>
+</table>
+<button (click)="export()">Export!</button>
